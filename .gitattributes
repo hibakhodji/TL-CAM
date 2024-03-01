@@ -7,3 +7,4 @@ CIFAR-10_to_CIFAR-100/tl_model/logs_tl_model/** filter=lfs diff=lfs merge=lfs -t
 CIFAR-10_to_CIFAR-100/tl_model_conv/logs_tl_model/** filter=lfs diff=lfs merge=lfs -text
 ImageNet_StanfordDogs/baseline/** filter=lfs diff=lfs merge=lfs -text
 ImageNet_StanfordDogs/cam_k5/logs_cam_k5/** filter=lfs diff=lfs merge=lfs -text
+ImageNet_StanfordDogs/concat_cam_k5/logs_concat_cam_k5/** filter=lfs diff=lfs merge=lfs -text
