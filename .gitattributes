@@ -1,1 +1,7 @@
 CIFAR-10_to_CIFAR-100/cifar10_model.h5 filter=lfs diff=lfs merge=lfs -text
+CIFAR-10_to_CIFAR-100/baseline/logs_baseline/** filter=lfs diff=lfs merge=lfs -text
+CIFAR-10_to_CIFAR-100/cam_k5/logs_cam_k5/** filter=lfs diff=lfs merge=lfs -text
+CIFAR-10_to_CIFAR-100/cam_k25/logs_cam_k25/** filter=lfs diff=lfs merge=lfs -text
+CIFAR-10_to_CIFAR-100/cam_k50/logs_cam_k50/** filter=lfs diff=lfs merge=lfs -text
+CIFAR-10_to_CIFAR-100/tl_model/logs_tl_model/** filter=lfs diff=lfs merge=lfs -text
+CIFAR-10_to_CIFAR-100/tl_model_conv/logs_tl_model/** filter=lfs diff=lfs merge=lfs -text

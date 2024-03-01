@@ -1,0 +1,7 @@
+EvalX Results for cam_k50:
+Average loss of target-specific features: 0.6261109026072346
+Nb of inf values: 14
+Max value: 4.1588830833596715
+Avg Jaccard Distance: 0.5406571626663208
+Avg QXP preds: 7
+End Time: 2024-02-29 01:48:08.072436

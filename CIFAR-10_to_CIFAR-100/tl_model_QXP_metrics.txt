@@ -1,0 +1,7 @@
+EvalX Results for tl_model:
+Average loss of target-specific features: 1.2134540870282997
+Nb of inf values: 31
+Max value: 6.238324625039508
+Avg Jaccard Distance: 0.5787666440010071
+Avg QXP preds: 20
+End Time: 2024-02-29 08:47:26.000244
