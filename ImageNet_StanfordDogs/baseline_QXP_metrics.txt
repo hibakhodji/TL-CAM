@@ -1,0 +1,7 @@
+EvalX Results for baseline:
+Average loss of target-specific features: 4.483989782757766
+Nb of inf values: 163
+Max value: 5.545177444479562
+Avg Jaccard Distance: 0.8679370284080505
+Avg QXP preds: 13
+End Time: 2024-02-27 20:08:22.944359

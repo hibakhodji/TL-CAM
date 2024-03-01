@@ -85,7 +85,8 @@ class EvalX:
         intermediate_layer_model = Model(inputs=model.input, outputs=model.get_layer(penultimate_layer).output)
         intermediate_layer_model.summary()
         penultimate_output = intermediate_layer_model(seed_inputs, training=False)
-        penultimate_output = tf.math.scalar_mul(-1, penultimate_output)
+        #add this line for cifar-100
+        #penultimate_output = tf.math.scalar_mul(-1, penultimate_output)
 
 
         if threshold is not None:

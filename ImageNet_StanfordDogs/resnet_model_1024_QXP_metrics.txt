@@ -1,0 +1,7 @@
+EvalX Results for resnet_model_1024:
+Average loss of target-specific features: 0.23261231710021196
+Nb of inf values: 0
+Max value: 2.8371272433773522
+Avg Jaccard Distance: 0.5780049562454224
+Avg QXP preds: 10
+End Time: 2024-02-28 08:54:18.025802

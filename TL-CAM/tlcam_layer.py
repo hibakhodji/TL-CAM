@@ -102,7 +102,8 @@ class ScoreCAM(keras.layers.Layer):
 
             # Feeding input to new model to extract feature maps of last conv layer
             penultimate_output = CAModel(inputs, training=False)
-
+            #add this line for cifar-100
+            #penultimate_output = tf.math.scalar_mul(-1, penultimate_output)
 
 
             activation_variances = tf.math.reduce_variance(penultimate_output,

@@ -1,0 +1,7 @@
+EvalX Results for concat_k5:
+Average loss of target-specific features: 4.059081092870695
+Nb of inf values: 68
+Max value: 5.545177444479562
+Avg Jaccard Distance: 0.8196231126785278
+Avg QXP preds: 10
+End Time: 2024-02-27 20:37:22.065238
