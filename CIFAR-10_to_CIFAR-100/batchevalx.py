@@ -1,21 +1,22 @@
 import os
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
-import tensorflow as tf
-from computeEvalX_var import EvalX
+os.environ["CUDA_VISIBLE_DEVICES"] = " "
 import sys
+import tensorflow as tf
+sys.path.append('../EvalX')
+from computeEvalX import EvalX
 import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow.keras.models import load_model
-import random
 from functools import reduce
+sys.path.append('../TL-CAM')
 from tlcam_layer import ScoreCAM
-import re
+from utils import get_conv_layer_name
 import math
 import datetime
 
 
-modelpath = '../Training/'
+modelpath = './'
 
 def _inf_(input_list):
 
@@ -64,7 +65,7 @@ baseline = load_model(modelpath+"baseline/baseline_model.h5")
 #baseline.summary()
 print(baseline.evaluate(x_test, tf.keras.utils.to_categorical(y_test, 100)))
 
-print("Loading TL-CAM model with k=", 50)
+print("Loading TL-CAM model")
 tlcam_model = load_model(modelpath+"cam_k50/cam_k50_model.h5")
 #tlcam_model.summary()
 print(tlcam_model.evaluate(x_test, tf.keras.utils.to_categorical(y_test, 100)))
@@ -80,8 +81,6 @@ tlconv = load_model(modelpath+"tl_model_conv/tl_model_model.h5")
 #tlconv.summary()  
 #print(tlconv.evaluate(x_test, tf.keras.utils.to_categorical(y_test, 100)))
 
-#x_test = x_test[0:1000] 
-#y_test = y_test[0:1000]
 
 print('x_test shape', x_test.shape)
 
@@ -158,14 +157,12 @@ subset_y_enc = tf.keras.utils.to_categorical(subset_y, 100)
 
 print('subset_y_enc[:20]', subset_y_enc[:20])
 
-for model_name, model in models_dict.items():
 
+for model_name, model in models_dict.items():
     threshold = 64 if model_name == 'tl_model_64' else None
-    layer ='conv2d_2' if model_name in ['baseline', 'cam_k50'] else 'conv2d_4'
 
     print('------------------------------------ model:', model_name)
-
-    avg_kl, avg_jaccard_distance, avg_qxp_preds, nbinf, maxvaluetf = batch_processing(subset_x, model, 4, threshold, subset_y_enc, layer)
+    avg_kl, avg_jaccard_distance, avg_qxp_preds, nbinf, maxvaluetf = batch_processing(subset_x, model, 8, threshold, subset_y_enc, get_conv_layer_name(model, -1))
     end_time = datetime.datetime.now()
 
     file_path = f"{model_name}_QXP_metrics.txt"
@@ -177,3 +174,5 @@ for model_name, model in models_dict.items():
         file.write(f"Avg Jaccard Distance: {avg_jaccard_distance}\n")
         file.write(f"Avg QXP preds: {avg_qxp_preds}\n")
         file.write(f"End Time: {end_time}\n") 
+
+

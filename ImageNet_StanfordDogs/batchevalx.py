@@ -1,10 +1,11 @@
 import os
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = " "
-from computeEvalX import EvalX
 import tensorflow as tf
 import sys
-sys.path.append('../')
+sys.path.append('../TL-CAM')
+sys.path.append('../EvalX')
+from computeEvalX import EvalX
 import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
@@ -12,6 +13,7 @@ from tensorflow.keras.models import load_model
 import random
 from functools import reduce
 from tlcam_layer import ScoreCAM 
+from utils import get_conv_layer_name
 import re
 import math
 import datetime
@@ -24,7 +26,7 @@ tf.random.set_seed(seed_value)
 #mx       = 70
 
 
-modelpath = '../models'
+modelpath = './'
 
 def _inf_(input_list):
 
@@ -62,7 +64,7 @@ def batch_processing(data, model, steps, threshold, ground_truths, layer):
 print("Loading data")
 test_datagen  = ImageDataGenerator(rescale=1/255)
 test_generator = test_datagen.flow_from_directory(
-        '../StanfordDogs/test/',
+        '../../../Preliminay_TL-CAM/ImageNet_to_Stanford/StanfordDogs/test/',
         batch_size=2153,
         target_size=(224, 224),
         class_mode = 'sparse', 
@@ -76,19 +78,19 @@ print(x_test.shape)
 
 
 print("Loading baseline model")
-baseline = load_model(modelpath+"/baseline_model.h5")
+baseline = load_model(modelpath+"baseline/baseline_model.h5")
 baseline.summary()
 #print(baseline.evaluate(x_test, y_test, batch_size=8))
 
 
 print("Loading TL-CAM CONCAT model with k=", 5)
-tlcam_model_concat = load_model(modelpath+"/concat_cam_k5_model.h5")
+tlcam_model_concat = load_model(modelpath+"concat_cam_k5/concat_cam_k5_model.h5")
 tlcam_model_concat.summary()
 #print(tlcam_model_concat.evaluate(x_test, y_test, batch_size=8))
 
 
 print("Loading ResNet model")
-resnet = load_model(modelpath+"/resnet_tl_model.h5")
+resnet = load_model(modelpath+"resnet_tl/resnet_tl_model.h5")
 resnet.summary()
 #print(resnet.evaluate(x_test, y_test, batch_size=32))
 
@@ -135,8 +137,8 @@ print('checking if predictions are the same with lists --->', b==c==r)
 models_dict = {
     'baseline':baseline,
     'concat_k5':tlcam_model_concat,
-    'resnet_model_1024':resnet,
-    'resnet_model_256':resnet,
+#    'resnet_model_1024':resnet,
+#    'resnet_model_256':resnet,
     'resnet_model_128':resnet, 
 }
 
@@ -151,11 +153,10 @@ print('subset_y_enc shape', subset_y_enc.shape)
 
 for model_name, model in models_dict.items():
 
-    layer = 'conv5_block3_3_conv' if model_name in ['resnet_model_1024', 'resnet_model_256', 'resnet_model_128'] else ('conv2d_4' if model_name == 'baseline' else 'conv2d_9')
     threshold = 1024 if model_name == 'resnet_model_1024' else (256 if model_name == 'resnet_model_256' else None)
     if model_name == 'resnet_model_128': threshold = 128
 
-    avg_kl, avg_jaccard_distance, avg_qxp_preds, nbinf, maxvaluetf = batch_processing(subset_x, model, 2, threshold, subset_y_enc, layer)
+    avg_kl, avg_jaccard_distance, avg_qxp_preds, nbinf, maxvaluetf = batch_processing(subset_x, model, 2, threshold, subset_y_enc, get_conv_layer_name(model, -1))
     end_time = datetime.datetime.now()
 
     file_path = f"{model_name}_QXP_metrics.txt"
