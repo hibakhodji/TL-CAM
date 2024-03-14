@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 import os
+import random
 
 def check_initial_weights(models):
     all_weights_match = True
