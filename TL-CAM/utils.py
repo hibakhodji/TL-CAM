@@ -97,6 +97,7 @@ def get_conv_layer_name(model, index):
 
 
 
+
 class SaveImageLayer(tf.keras.layers.Layer):
 
     def __init__(self, output_dir, image_name_prefix="image_", **kwargs):
@@ -105,12 +106,13 @@ class SaveImageLayer(tf.keras.layers.Layer):
         self.image_name_prefix = image_name_prefix
 
     @tf.autograph.experimental.do_not_convert
-    def call(self, inputs, training=None, eval=True):
+    def call(self, inputs, training=None):
 
-        if training in [None, eval]: return inputs
+        if inputs.shape[0] is None: return inputs
 
         for i, image in enumerate(inputs):
-            image_name = f"{self.image_name_prefix}{i}.png"
+            r = random.randint(0, 100)
+            image_name = f"{self.image_name_prefix}{i}_{training}_{r}.png"
             image_path = os.path.join(self.output_dir, image_name)
             tf.keras.preprocessing.image.save_img(image_path, image)
         return inputs  

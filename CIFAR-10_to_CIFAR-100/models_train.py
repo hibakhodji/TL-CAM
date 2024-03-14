@@ -97,7 +97,7 @@ def createModel(placeholder, outputSize, sourceModel=None, layer=None, threshold
     if add_ScoreCAM:
        x = ScoreCAM(layer, threshold)(x, sourceModel)
 
-    #x = SaveImageLayer(output_dir='intermediate_')(x, eval=False)
+    #x = SaveImageLayer(output_dir='intermediate_')(x)
     x = convBlock(x, 16)
     x = convBlock(x, 32)
     x = convBlock(x, 64)

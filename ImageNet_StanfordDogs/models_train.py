@@ -113,7 +113,7 @@ def createModel(placeholder, outputSize, seed=None):
 
     x = placeholder
     x = data_augmentation(x)
-    #x = SaveImageLayer(output_dir='intermediate_baseline_train')(x, eval=False)
+    #x = SaveImageLayer(output_dir='intermediate_baseline_train')(x)
     x = convBlock(x, 16)
     x = convBlock(x, 32)
     x = convBlock(x, 64)
