@@ -132,7 +132,7 @@ def concatModel(placeholder, outputSize, sourceModel=None, layer=None, threshold
 
     tlcam_output = ScoreCAM(layer, threshold)(placeholder, sourceModel, preprocess_input=preprocess_input)
 
-    #x = SaveImageLayer(output_dir='intermediate_concat_train_original')(placeholder, eval=False)
+    #x = SaveImageLayer(output_dir='intermediate_concat_train_original')(placeholder)
     #placeholder = x
 
     task1 = data_augmentation(placeholder)
@@ -142,7 +142,7 @@ def concatModel(placeholder, outputSize, sourceModel=None, layer=None, threshold
     task1 = convBlock(task1, 128)
     task1 = convBlock(task1, 256)
 
-    #x = SaveImageLayer(output_dir='intermediate_concat_train')(tlcam_output, eval=False)
+    #x = SaveImageLayer(output_dir='intermediate_concat_train')(tlcam_output)
     #tlcam_output = x
 
     task2 = data_augmentation(tlcam_output)
