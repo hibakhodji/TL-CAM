@@ -4,7 +4,6 @@
 
 * Global quantitative explainability metrics (Avg. Kullback-Liebler & Avg. Jaccard Distance) -> EvalX
 
+* CIFAR-10_to_CIFAR-100 & ImageNet_StanfordDogs contain training code (models_train.py), evaluation code (models_evaluate.py), and explainability evaluation code & results (Avg. Kullback-Liebler & Avg. Jaccard Distance) (batchevalx.py)
 
-* CIFAR-10_to_CIFAR-100 & ImageNet_StanfordDogs contain trained models (models_train.py), evaluation results (models_evaluate.py), and explainability evaluation results (Avg. Kullback-Liebler & Avg. Jaccard Distance) (batchevalx.py)
-
-to git clone this rep make sure Git Large File Storage is properly installed
+Trained models and tensorboard data can be found here: https://gitlab.unistra.fr/khodji/tl-cam
