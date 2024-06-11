@@ -116,7 +116,7 @@ class ScoreCAM_QXP:
         # Extracting weights
 
 
-        fm_weights = [tf.gather(prediction, score, axis=-1) for prediction, score in zip(preds, scores)]
+        fm_weights = [tf.gather(prediction, [score], axis=-1) for prediction, score in zip(preds, scores)]
         fm_weights = tf.stack(fm_weights, axis=0)
         #print('fm_weights -------------->', fm_weights)
         
