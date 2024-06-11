@@ -64,7 +64,7 @@ def batch_processing(data, model, steps, threshold, ground_truths, layer):
 print("Loading data")
 test_datagen  = ImageDataGenerator(rescale=1/255)
 test_generator = test_datagen.flow_from_directory(
-        '../../../Preliminay_TL-CAM/ImageNet_to_Stanford/StanfordDogs/test/',
+        'StanfordDogs/test/',
         batch_size=2153,
         target_size=(224, 224),
         class_mode = 'sparse', 
