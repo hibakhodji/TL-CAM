@@ -22,49 +22,23 @@ class EvalX:
 
 
     def jd_explainability(self, input_image, model, predictions):
-        print('predictions.shape', predictions)
-        print('input_image.shape', input_image.shape)
-        pred_vector = model(tf.expand_dims(input_image, axis=0), training=False)[0]
         max_preds = tf.argmax(predictions, axis=-1)
-        print('max_preds', max_preds)
-        print('max_preds shape', max_preds.shape)
         unique_max_preds = set(max_preds.numpy())
         qxp_len = len(unique_max_preds)
-
-        print('sorted_pred_vector_top_indices = (tf.argsort(pred_vector, direction=DESCENDING).numpy())[:qxp_len]')        
         sorted_pred_vector_top_indices = (tf.argsort(pred_vector, direction='DESCENDING').numpy())[:qxp_len]
-        print('sorted_pred_vector_top_indices', sorted_pred_vector_top_indices)   
-        print("unique_max_preds set:", unique_max_preds)
         distance= self.jaccard_distance(sorted_pred_vector_top_indices, unique_max_preds)
-        print('distance--->', distance)
         return distance, qxp_len
         
     
     
-    def kl_loss_features(self, ground_truth, predictions, nb_channels):
-        print('predictions.shape', predictions)
-        print('nb_channels', nb_channels)
+    def kl_loss_features(self, ground_truth, predictions):
+        nb_channels=predictions.shape[0]
         max_preds = tf.argmax(predictions, axis=-1)
-        print('max_preds shape', max_preds.shape)
-        print('max_preds', max_preds)
         unique_max_preds = set(max_preds.numpy())
-        print("unique_max_preds set:", unique_max_preds)
         nbpreds = [tf.unstack(max_preds).count(i) for i in unique_max_preds]
-        print('nbpreds:', nbpreds)  
-        print('predictions.shape[-1]', predictions.shape[-1])        
         qxp = [0 for element in range(predictions.shape[-1])]
         for index, value in zip(unique_max_preds, nbpreds):
             qxp[int(index)] = float(value/nb_channels)
-
-        print('ground_truth -->', ground_truth)
-        print('type(ground_truth)--->', type(ground_truth))
-        print('index grouns truth--->', np.where(ground_truth==1))
-        print('sum gt ---->', np.sum(ground_truth))
-        print("qxp---------->", qxp)
-        print('sum qxp --------->', sum(qxp))
-        print('len(qxp)', len(qxp))
-        print('len(ground_truth)', len(ground_truth))
-        print('KL---->', sum(rel_entr(ground_truth, qxp)))
         return sum(rel_entr(ground_truth, qxp))
         
 
@@ -80,7 +54,6 @@ class EvalX:
                  training = False):
 
 
-        print('layer used ---->', penultimate_layer)
         # Extract feature maps of selected layer
         intermediate_layer_model = Model(inputs=model.input, outputs=model.get_layer(penultimate_layer).output)
         intermediate_layer_model.summary()
@@ -90,7 +63,6 @@ class EvalX:
 
 
         if threshold is not None:
-           print('activation_variances = tf.math.reduce_variance(penultimate_output')            
            activation_variances = tf.math.reduce_variance(penultimate_output,
                                                      axis=tf.range(start=1,
                                                                    limit=(tf.keras.backend.ndim(penultimate_output)-1),
@@ -107,9 +79,6 @@ class EvalX:
 
         nsamples = penultimate_output.shape[0]
         channels = penultimate_output.shape[-1]
-        print('penultimate_output.shape', penultimate_output.shape)
-        print('channels', channels)
-        print('samples', nsamples)
 
         for p in penultimate_output:
             print('p.shape', p.shape)
@@ -150,15 +119,9 @@ class EvalX:
                 masked_inputs.append(tf.math.multiply(tf.expand_dims(normalized, axis=-1), tf.cast(img, tf.float32)))
             masked_seed_inputs.append(tf.stack(masked_inputs, axis=0))
                 
-        print('masked_seed_inputs', np.shape(masked_seed_inputs))
-        for m in masked_seed_inputs:
-            print('masked shape', m.shape)
        #Predicting masked seed-inputs
        
         preds = [model(masked_inputs, training=training) for masked_inputs in masked_seed_inputs]
-        print('predsh shape', np.shape(preds))
-        for pred in preds:
-            print('pred shape', pred.shape)
                 
         #Evaluation
         # Jaccard Distance
@@ -173,11 +136,8 @@ class EvalX:
         if compute_kl: 
             avg_target_features = []
             for ground_truth, prediction in zip(ground_truths, preds):
-                avg_target_features.append(self.kl_loss_features(ground_truth, prediction, prediction.shape[0]))
+                avg_target_features.append(self.kl_loss_features(ground_truth, prediction))
 
         if not compute_kl : return avg_jaccard_distance, avg_nb_qxp_preds
-        print('avg_jaccard_distance', avg_jaccard_distance)
-        print('avg_nb_qxp_preds', avg_nb_qxp_preds)
-        print('avg_target_features', avg_target_features) 
         return avg_target_features, avg_jaccard_distance, avg_nb_qxp_preds
 
