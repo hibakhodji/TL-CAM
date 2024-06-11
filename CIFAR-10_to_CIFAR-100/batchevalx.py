@@ -130,16 +130,6 @@ c = list(tf.argmax(tlcam_model.predict(subset_x), axis=-1))
 t = list(tf.argmax(tl.predict(subset_x), axis=-1))
 
 
-print('checking if predictions are the same ----->', b==c==t)
-ok=[]
-for i,j,k in zip(b,c,t):
-    #print(int(i),int(j),int(k))
-    if not i==j==k: ok.append('not ok')
-    if i==j==k: ok.append('ok')
-
-print('ok.count(not ok)', ok.count('not ok'))
-print('ok.count(ok)', ok.count('ok'))
-
 models_dict = {
     'tl_model_64':tl,
     'baseline':baseline,
