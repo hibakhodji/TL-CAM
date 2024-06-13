@@ -22,6 +22,7 @@ class EvalX:
 
 
     def jd_explainability(self, input_image, model, predictions):
+        pred_vector = model(tf.expand_dims(input_image, axis=0), training=False)[0]
         max_preds = tf.argmax(predictions, axis=-1)
         unique_max_preds = set(max_preds.numpy())
         qxp_len = len(unique_max_preds)
