@@ -71,9 +71,9 @@ class EvalX:
 
 
            top_k_var, top_k_indices = tf.math.top_k(activation_variances, threshold)
-           print('top_k_var, top_k_indices', top_k_var, top_k_indices)
+          
            top_k_indices   = [tf.reshape(index, (-1)) for index in top_k_indices]
-           print('top_k_indices', top_k_indices)
+           
            penultimate_outputs = [tf.gather(output, index, axis=-1) for output, index in zip(penultimate_output, top_k_indices)]
            penultimate_output  = tf.stack(penultimate_outputs, axis=0)
 
@@ -81,8 +81,7 @@ class EvalX:
         nsamples = penultimate_output.shape[0]
         channels = penultimate_output.shape[-1]
 
-        for p in penultimate_output:
-            print('p.shape', p.shape)
+        
 
         zoom_factors = zoom_factor(penultimate_output.shape[1:-1], seed_inputs.shape[1:-1])
         zoom_factors = (1, ) + zoom_factors + (1, )
